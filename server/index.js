@@ -1,8 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+require("dotenv").config(); // Here we are loading .env once into the process.env
 
-const Schema = mongoose.Schema;
 const app = express();
 const port = process.env.PORT;
 

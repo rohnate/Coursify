@@ -3,3 +3,6 @@
         Cloning is only for empty folders.
     If the remote repo on git has some files, then you have to pull them first.
 
+- dotenv is loaded once, in the main file only then can called anywhere. npm install dotenv
+
+
