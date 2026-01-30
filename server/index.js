@@ -1,13 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config(); // Here we are loading .env once into the process.env
-const userRouter = require("./routes/user"); // importing the router from the specific router file.
-const adminRouter = require("./routes/admin");
+const userRouter = require("./routes/user.route"); // importing the router from the specific router file.
+const adminRouter = require("./routes/admin.route");
+const courseRouter = require("./routes/course.route");
 
 const app = express();
 app.use(express.json());
 const port = process.env.PORT;
 
+app.use("/api", courseRouter);
 app.use("/user", userRouter); // this is how to use the Routes on to the main file
 app.use("/admin", adminRouter);
 
