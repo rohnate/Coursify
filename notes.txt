@@ -6,3 +6,138 @@
 - dotenv is loaded once, in the main file only then can called anywhere. npm install dotenv
 
 
+Q - What is Router in Express ?
+
+Ans - Imagine you put all routes in `index.js`:
+
+        ```js
+        app.get("/login", ...)
+        app.post("/signup", ...)
+        app.get("/courses", ...)
+        app.post("/courses", ...)
+        app.delete("/courses/:id", ...)
+        ```
+
+        😵 File becomes huge and messy.
+
+        👉 Router helps you split routes into small files.
+
+        ---
+
+        ## What is a router? (simple definition)
+
+        > A router is like a mini Express app that handles routes for a specific feature.
+
+        Think:
+
+        * `app` → whole application
+        * `router` → one section (users, courses, auth)
+
+        ---
+
+        ## Basic router example
+
+        `routes/user.routes.js`
+
+        ```js
+        const express = require("express");
+        const router = express.Router();
+
+        router.post("/signup", (req, res) => {
+        res.send("User signup");
+        });
+
+        router.post("/login", (req, res) => {
+        res.send("User login");
+        });
+
+        module.exports = router;
+        ```
+
+        ---
+
+        ## Using router in main file
+
+        `index.js`
+
+        ```js
+        const express = require("express");
+        const app = express();
+
+        const userRouter = require("./routes/user.routes");
+
+        app.use("/users", userRouter);
+
+        app.listen(3000);
+        ```
+
+        ---
+
+        ## How URLs are formed (important!)
+
+        ```js
+        app.use("/users", userRouter);
+        ```
+
+        Inside router:
+
+        ```js
+        router.post("/login", ...)
+        ```
+
+        ➡ Final URL:
+
+        ```
+        POST /users/login
+        ```
+
+        ---
+
+        ## Why router is IMPORTANT (big reasons)
+
+        1️⃣ Clean code
+
+        Each feature has its own file.
+
+        2️⃣ Easy to scale
+
+        Add new routes without touching main file.
+
+        3️⃣ Team-friendly
+
+        Multiple devs can work on different routers.
+
+        4️⃣ Middleware support
+
+        You can add middleware to router only.
+
+        ---
+
+        ## Router with middleware (very useful)
+
+        ```js
+        router.use(authMiddleware);
+
+        router.get("/profile", (req, res) => {
+        res.send("Protected profile");
+        });
+        ```
+
+        Only this router is protected 🔐
+
+        ---
+
+        ## Folder structure (recommended)
+
+        ```
+        src
+        ├── index.js
+        ├── routes
+        │   ├── user.routes.js
+        │   ├── course.routes.js
+        │   └── admin.routes.js
+        ├── controllers
+        └── models
+        ```
+        - It just connects URL → logic.
+

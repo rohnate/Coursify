@@ -1,13 +1,21 @@
-const express = require("express");
-const jwt = require("jsonwebtoken");
+const { Router } = require("express");
 
-const app = express();
-const port = process.env.port;
+const uRouter = Router();
 
-app.use(express.json());
+uRouter.post("/signup", function (req, resp) {
+  resp.send("signup page");
+});
+uRouter.post("/login", function (req, resp) {
+  resp.send("login page");
+});
+uRouter.get("/courses", function (req, resp) {
+  resp.send("courses page");
+});
+uRouter.post("/course/purchase", function (req, resp) {
+  resp.send("purchase page");
+});
+uRouter.get("/mycourses", function (req, resp) {
+  resp.send("mycourses page");
+});
 
-app.post("/signup", function (req, resp) {});
-app.post("/login", function (req, resp) {});
-app.get("/courses", function (req, resp) {});
-app.post("/user/course/purchase", function (req, resp) {});
-app.get("/user/mycourses", function (req, resp) {});
+module.exports = uRouter;
