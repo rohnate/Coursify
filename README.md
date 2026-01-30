@@ -4,8 +4,12 @@
     - npm i mongoose, jsonwebtoken, express, zod, dotenv
     - create a skeleton structure of routes for admin and user
     - store all the credentials in environment variable file (connection string, jwt secret key, etc)
-    - input validation using zod
-    - connect to mongo database
-    - add middlewares for user and admin auth
     - define the schema for user, admin, course, purchase
+    - input validation using zod
+    - add middlewares for auth, user and admin
+    - connect to mongo database
     - building frontend
+
+
+
+    

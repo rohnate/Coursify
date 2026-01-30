@@ -141,3 +141,109 @@ Ans - Imagine you put all routes in `index.js`:
         ```
         - It just connects URL → logic.
 
+Q - Can we use Zod input validation inside the mongoose schema itself ?
+
+Ans - You do NOT use Zod inside database schemas (like Mongoose schemas).
+
+    Zod is used for request validation,
+    Mongoose schema is used for database structure.
+
+    They solve different problems.
+
+    ---
+
+    ## Think of it like this 🧠
+
+    1️⃣ Zod → “Is the incoming data valid?”
+
+    * Runs before data reaches DB
+    * Validates request body, params, query
+
+    2️⃣ Mongoose Schema → “How is data stored?”
+
+    * Defines MongoDB structure
+    * Enforces DB-level rules
+
+    👉 They should not be mixed.
+
+    ---
+
+    ## Correct and CLEAN architecture ✅
+
+    ```
+    request
+    ↓
+    Zod (validate input)
+    ↓
+    Controller
+    ↓
+    Mongoose Schema (save to DB)
+    ```
+
+    ---
+
+    ## How to use Zod properly (BEST PRACTICE)
+
+    Step 1: Create Zod schema (validation)
+
+    ```js
+    // validators/course.zod.js
+    const { z } = require("zod");
+
+    const createCourseSchema = z.object({
+    title: z.string().min(3),
+    price: z.number().positive(),
+    description: z.string().optional(),
+    });
+
+    module.exports = { createCourseSchema };
+    ```
+
+    ---
+
+    Step 2: Use Zod in route or controller
+
+    ```js
+    const { createCourseSchema } = require("../validators/course.zod");
+
+    router.post("/courses", (req, res) => {
+    const parsed = createCourseSchema.safeParse(req.body);
+
+    if (!parsed.success) {
+        return res.status(400).json(parsed.error);
+    }
+
+    // parsed.data is clean & validated
+    });
+    ```
+
+    ---
+
+    ## ❌ What you should NOT do
+
+    ```js
+    const courseSchema = new mongoose.Schema({
+    title: z.string(),   // ❌ WRONG
+    });
+    ```
+
+    Zod does not work here.
+
+    ---
+
+    ## Advanced (optional, for later)
+
+    You can:
+
+    * Share types between Zod & Mongoose
+    * Generate TS types from Zod
+    * Keep Zod as the single source of truth
+
+    But for now → keep them separate.
+
+    ---
+
+    ## Golden rule (remember this forever)
+
+    > Zod validates requests
+    > Mongoose defines database structure
