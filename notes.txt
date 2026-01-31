@@ -143,7 +143,7 @@ Ans - Imagine you put all routes in `index.js`:
 
 Q - Can we use Zod input validation inside the mongoose schema itself ?
 
-Ans - You do NOT use Zod inside database schemas (like Mongoose schemas).
+Ans - You do NOT use Zod inside database schemas (like Mongoose schemas).   
 
     Zod is used for request validation,
     Mongoose schema is used for database structure.
