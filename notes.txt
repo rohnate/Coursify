@@ -247,3 +247,181 @@ Ans - You do NOT use Zod inside database schemas (like Mongoose schemas).
 
     > Zod validates requests
     > Mongoose defines database structure
+
+Q - What are controllers ? and what problem do controllers solve?
+
+Ans - Without controllers, people write code like this in routes:
+
+        ```js
+        router.post("/courses", async (req, res) => {
+        // validate
+        // auth check
+        // db logic
+        // response
+        });
+        ```
+
+        After some time:
+
+        * routes become huge
+        * logic is duplicated
+        * code is hard to read & test
+
+        👉 Controllers fix this.
+
+        ---
+
+        🔴 What is a controller? (simple definition)
+
+        > A controller is a function that contains the actual business logic
+        > Routes only decide which URL calls which controller
+
+        ---
+
+        ## One-line summary 🧠
+
+        * Route = address
+        * Controller = work done at that address
+
+        ---
+
+        ## Very simple example
+
+        ❌ Without controller
+
+        ```js
+        router.post("/login", async (req, res) => {
+        const user = await User.findOne({ email: req.body.email });
+        res.json(user);
+        });
+        ```
+
+        ---
+
+        ✅ With controller
+
+        # controller
+
+        ```js
+        // controllers/user.controller.js
+        async function login(req, res) {
+        const user = await User.findOne({ email: req.body.email });
+        res.json(user);
+        }
+
+        module.exports = { login };
+        ```
+
+        # route
+
+        ```js
+        // routes/user.routes.js
+        const { login } = require("../controllers/user.controller");
+
+        router.post("/login", login);
+        ```
+
+        Clean ✨
+
+        ---
+
+        ## Why controllers are IMPORTANT
+
+        1️⃣ Clean routes
+
+        Routes only map URLs → controllers.
+
+        2️⃣ Reusable logic
+
+        Same controller can be used by multiple routes.
+
+        3️⃣ Easy testing
+
+        You can test controller logic independently.
+
+        4️⃣ Real-world standard
+
+        Almost all production apps use controllers.
+
+        ---
+
+        ## Where controllers sit (structure)
+
+        ```
+        src
+        ├── routes
+        │   └── course.routes.js
+        ├── controllers
+        │   └── course.controller.js
+        ├── models
+        ├── middlewares
+        ```
+
+        ---
+
+        ## Real example (course controller)
+
+        # controller
+
+        ```js
+        // controllers/course.controller.js
+        const Course = require("../models/course.model");
+
+        async function createCourse(req, res) {
+        const course = await Course.create({
+            title: req.body.title,
+            price: req.body.price,
+            creator: req.user._id,
+        });
+
+        res.status(201).json(course);
+        }
+
+        module.exports = { createCourse };
+        ```
+
+        ---
+
+        # route
+
+        ```js
+        router.post("/courses", auth, role("admin"), createCourse);
+        ```
+
+        ---
+
+        ## What controllers should NOT do ❌
+
+        * ❌ define routes
+        * ❌ connect DB
+        * ❌ handle auth directly
+
+        ---
+
+        ## What controllers SHOULD do ✅
+
+        * handle request
+        * talk to DB
+        * apply business rules
+        * send response
+
+        ---
+
+        ## Mental flow (remember this)
+
+        ```
+        Request
+        → Middleware
+        → Controller
+        → Model
+        → Response
+        ```
+
+        ---
+
+        ## Beginner-friendly rule
+
+        > If logic is more than 3–4 lines → put it in a controller
+
+        ---
+

@@ -2,6 +2,7 @@ const { Router } = require("express");
 const adminMiddleware = require("../middlewares/admin.middleware");
 const aRouter = Router();
 
+
 aRouter.post("/signup", function (req, resp) {
   resp.send("admin signup");
 });

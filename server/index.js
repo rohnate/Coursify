@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config(); // Here we are loading .env once into the process.env
+
 const userRouter = require("./routes/user.route"); // importing the router from the specific router file.
 const adminRouter = require("./routes/admin.route");
 const courseRouter = require("./routes/course.route");
