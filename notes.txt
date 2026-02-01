@@ -1,4 +1,4 @@
- - You do NOT clone when you already have a local project.
+- You do NOT clone when you already have a local project.
     You add the remote instead.
         Cloning is only for empty folders.
     If the remote repo on git has some files, then you have to pull them first.
@@ -425,3 +425,8 @@ Ans - Without controllers, people write code like this in routes:
 
         ---
 
+- Request
+    → Middleware
+    → Controller
+    → Model
+    → Response

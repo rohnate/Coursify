@@ -1,10 +1,16 @@
 const { Router } = require("express");
 const adminMiddleware = require("../middlewares/admin.middleware");
+const {
+  adminSignup,
+  adminLogin,
+  createCourse,
+  deleteCourse,
+  courseEdit,
+} = require("../controllers/admin.controller");
 const aRouter = Router();
 
-
-aRouter.post("/signup", function (req, resp) {
-  resp.send("admin signup");
+aRouter.post("/signup", adminMiddleware, adminSignup, (req, resp) => {
+  resp.send("Admin has signed-up Successfully.");
 });
 
 aRouter.post("/login", function (req, resp) {

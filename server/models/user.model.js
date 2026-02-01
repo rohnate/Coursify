@@ -1,11 +1,10 @@
 const mongoose = require("mongoose"); // you can imports like this or see admin model for another way
 const schema = mongoose.Schema;
-const objectId = mongoose.Types.ObjectId;
 
 const userSchema = new schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  firstName: String,
+  firstName: { type: String, required: true },
   lastName: String,
 });
 

@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 const port = process.env.PORT;
 
-app.use("/api", courseRouter);
+app.use("/course", courseRouter);
 app.use("/user", userRouter); // this is how to use the Routes on to the main file
 app.use("/admin", adminRouter);
 
