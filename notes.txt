@@ -430,3 +430,6 @@ Ans - Without controllers, people write code like this in routes:
     → Controller
     → Model
     → Response
+
+- req lives for the entire request lifecycle
+    Every middleware & controller can access it
