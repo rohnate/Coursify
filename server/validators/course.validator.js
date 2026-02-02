@@ -7,6 +7,7 @@ const courseValidator = z.object({
   description: z.string().min(20).max(2000),
   price: z.number().max(10000),
   imageUrl: z.string(),
+  creatorId,
 });
 
 module.exports = courseValidator;

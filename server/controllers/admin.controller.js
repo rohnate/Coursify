@@ -1,4 +1,5 @@
 const aModel = require("../models/admin.model");
+const cModel = require("../models/course.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -64,7 +65,25 @@ async function adminLogin(req, resp, next) {
   }
 }
 
-function createCourse() {}
+async function createCourse(req, resp, next) {
+  const { email, password } = req.validatedData;
+  try {
+    const admin = await aModel.findOne({ email });
+    const passwordCheck = await bcrypt.compare(password, admin.password)
+    if (!passwordCheck) {
+      
+    } else {
+      
+    }
+  } catch (error) {
+    resp.status(400).json({
+      message: "user not found, create course",
+      error: error.message,
+    });
+  }
+  try {
+  } catch (error) {}
+}
 
 function deleteCourse() {}
 

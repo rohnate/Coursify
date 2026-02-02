@@ -2,7 +2,7 @@ const { Schema, default: mongoose, model } = require("mongoose");
 const objectId = mongoose.Types.ObjectId;
 
 const courseSchema = new Schema({
-  title: { type: String, required: true },
+  title: { type: String, required: true, unique: true },
   description: String,
   price: Number,
   imageUrl: String,

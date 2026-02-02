@@ -11,13 +11,13 @@ const aRouter = Router();
 
 aRouter.post("/signup", adminMiddleware, adminSignup, (req, resp) => {
   resp.send("Admin has signed-up Successfully.");
-});
+}); // checked - working perfect
 
 aRouter.post("/login", adminMiddleware, adminLogin, (req, resp) => {
   const token = req.token;
-  resp.setHeaders("authorization", token);
+  resp.setHeader("authorization", token);
   resp.send("Admin logged in successfully.");
-});
+}); // checked - working perfect
 
 aRouter.post("/create-course", function (req, resp) {
   resp.send("admin create-course");
