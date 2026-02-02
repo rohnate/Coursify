@@ -66,23 +66,32 @@ async function adminLogin(req, resp, next) {
 }
 
 async function createCourse(req, resp, next) {
-  const { email, password } = req.validatedData;
+  const { email, password, title, description, price, imageUrl } =
+    req.validatedCourseData;
+
   try {
     const admin = await aModel.findOne({ email });
-    const passwordCheck = await bcrypt.compare(password, admin.password)
+    const passwordCheck = await bcrypt.compare(password, admin.password);
     if (!passwordCheck) {
-      
+      resp.status(401).json({
+        message: "Incorrect password for create course",
+      });
     } else {
-      
+      await cModel.create({
+        title,
+        description,
+        price,
+        imageUrl,
+        creatorId: admin._id,
+      });
     }
+    next();
   } catch (error) {
     resp.status(400).json({
       message: "user not found, create course",
       error: error.message,
     });
   }
-  try {
-  } catch (error) {}
 }
 
 function deleteCourse() {}
