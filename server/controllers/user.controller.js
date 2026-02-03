@@ -6,20 +6,20 @@ const pModel = require("../models/purchase.model");
 async function userLogin(req, resp, next) {
   const { email, password } = req.validatedData;
   try {
-    const userB = await uModel.findOne({ email });
-    if (!userB) {
+    const user = await uModel.findOne({ email });
+    if (!user) {
       resp.status(401).json({
         message: "User not found, Invalid Email or password",
       });
     } else {
-      const isPasswordValid = await bcrypt.compare(password, userB.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         resp.status(401).json({
           message: "Invalid user Password, Please try again.",
         });
       } else {
         // If in future i want to do cookies or session based logic instead of token then below logic will change.
-        const token = jwt.sign({ id: userB._id }, process.env.JWT_USER_SECRET, {
+        const token = jwt.sign({ id: user._id }, process.env.JWT_USER_SECRET, {
           expiresIn: "30d",
         });
         req.token = token;

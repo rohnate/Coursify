@@ -30,22 +30,26 @@ async function adminSignup(req, resp, next) {
 async function adminLogin(req, resp, next) {
   const { email, password } = req.validatedData;
   try {
-    const user = await aModel.findOne({ email });
-    if (!user) {
+    const admin = await aModel.findOne({ email });
+    if (!admin) {
       resp.status(401).json({
         message: "Admin not found, Invalid Email or password",
       });
     } else {
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, admin.password);
       if (!isPasswordValid) {
         resp.status(401).json({
           message: "Invalid admin Password, Please try again.",
         });
       } else {
         // If in future i want to do cookies or session based logic instead of token then below logic will change.
-        const token = jwt.sign({ id: user._id }, process.env.JWT_ADMIN_SECRET, {
-          expiresIn: "30d",
-        });
+        const token = jwt.sign(
+          { id: admin._id },
+          process.env.JWT_ADMIN_SECRET,
+          {
+            expiresIn: "30d",
+          },
+        );
         req.token = token;
 
         //todo: next() is not a data carrier. so cannot do like next(token)
