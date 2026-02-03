@@ -1,4 +1,4 @@
-// This validates the input data for the user/admin using Zod.
+// This validates the input data for the user and admin using Zod.
 
 const { z } = require("zod");
 

@@ -5,26 +5,21 @@ const jwt = require("jsonwebtoken");
 
 async function adminSignup(req, resp, next) {
   const { email, password, firstName, lastName } = req.validatedData;
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    return hashedPassword;
-  } catch (e) {
-    resp.status(409).json({
-      message: "Error in storing password.",
-      error: e.message,
-    });
-  }
-  try {
+
     const result = await aModel.create({
       email,
       password: hashedPassword,
       firstName,
       lastName,
     });
+
     next();
   } catch (e) {
-    resp.status(400).json({
-      message: "Something unexpected occured",
+    return resp.status(400).json({
+      message: "Error during admin signup",
       error: e.message,
     });
   }
@@ -38,13 +33,13 @@ async function adminLogin(req, resp, next) {
     const user = await aModel.findOne({ email });
     if (!user) {
       resp.status(401).json({
-        message: "User not found, Invalid Email or password",
+        message: "Admin not found, Invalid Email or password",
       });
     } else {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         resp.status(401).json({
-          message: "Invalid Password, Please try again.",
+          message: "Invalid admin Password, Please try again.",
         });
       } else {
         // If in future i want to do cookies or session based logic instead of token then below logic will change.
@@ -59,7 +54,7 @@ async function adminLogin(req, resp, next) {
     }
   } catch (e) {
     resp.status(400).json({
-      message: "Something unexpected occured",
+      message: "Something unexpected occured during admin login",
       error: e.message,
     });
   }
@@ -94,9 +89,32 @@ async function createCourse(req, resp, next) {
   }
 }
 
-function deleteCourse() {}
+async function deleteCourse(req, resp, next) {
+  const { email, password, title } = req.validatedCourseData;
 
-function courseEdit() {}
+  try {
+    const admin = await aModel.findOne({ email });
+    const passwordCheck = await bcrypt.compare(password, admin.password);
+    if (!passwordCheck) {
+      resp.status(401).json({
+        message: "Incorrect password for delete course",
+      });
+    } else {
+      await cModel.findOneAndDelete({
+        title,
+        creatorId: admin._id,
+      });
+    }
+    next();
+  } catch (error) {
+    resp.status(400).json({
+      message: "unexpected error during course deletion",
+      error: error.message,
+    });
+  }
+}
+
+async function courseEdit(req, resp, next) {}
 
 module.exports = {
   adminSignup,

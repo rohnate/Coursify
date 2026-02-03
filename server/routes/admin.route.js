@@ -22,11 +22,16 @@ aRouter.post("/login", adminMiddleware, adminLogin, (req, resp) => {
 
 aRouter.post("/create-course", courseMiddleware, createCourse, (req, resp) => {
   resp.send("The course has been created by the admin");
-});
+}); // checked - working perfect
 
-aRouter.delete("/delete-course", function (req, resp) {
-  resp.send("admin delete-course");
-});
+aRouter.delete(
+  "/delete-course",
+  courseMiddleware,
+  deleteCourse,
+  (req, resp) => {
+    resp.send("The mentioned course has been deleted by the admin.");
+  },
+);  // checked - working perfect
 
 aRouter.put("/course-edit", function (req, resp) {
   resp.send("admin course-edit");
