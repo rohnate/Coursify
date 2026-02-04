@@ -1,5 +1,8 @@
 const { Router } = require("express");
-const adminMiddleware = require("../middlewares/admin.middleware");
+const {
+  adminMiddleware,
+  jwtVerifyAdminMiddleware,
+} = require("../middlewares/admin.middleware");
 const courseMiddleware = require("../middlewares/course.middleware");
 const {
   adminSignup,
@@ -20,20 +23,27 @@ aRouter.post("/login", adminMiddleware, adminLogin, (req, resp) => {
   resp.send("Admin logged in successfully.");
 }); // checked - working perfect
 
-aRouter.post("/create-course", courseMiddleware, createCourse, (req, resp) => {
-  resp.send("The course has been created by the admin");
-}); // checked - working perfect
+aRouter.post(
+  "/create-course",
+  jwtVerifyAdminMiddleware,
+  courseMiddleware,
+  createCourse,
+  (req, resp) => {
+    resp.send("The course has been created by the admin");
+  },
+); // checked - working perfect
 
 aRouter.delete(
   "/delete-course",
+  jwtVerifyAdminMiddleware,
   courseMiddleware,
   deleteCourse,
   (req, resp) => {
     resp.send("The mentioned course has been deleted by the admin.");
   },
-);  // checked - working perfect
+); // checked - working perfect
 
-aRouter.put("/course-edit", function (req, resp) {
+aRouter.put("/course-edit", jwtVerifyAdminMiddleware, function (req, resp) {
   resp.send("admin course-edit");
 });
 

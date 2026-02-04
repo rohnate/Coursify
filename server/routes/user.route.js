@@ -1,5 +1,8 @@
 const { Router } = require("express");
-const adminMiddleware = require("../middlewares/admin.middleware");
+const {
+  userMiddleware,
+  jwtVerifyUserMiddleware,
+} = require("../middlewares/user.middleware");
 const courseMiddleware = require("../middlewares/course.middleware");
 const uRouter = Router();
 const {
@@ -8,16 +11,16 @@ const {
   userPurchase,
 } = require("../controllers/user.controller");
 
-uRouter.post("/signup", adminMiddleware, userSignup, (req, resp) => {
+uRouter.post("/signup", userMiddleware, userSignup, (req, resp) => {
   resp.send("user has signed up successfully.");
 }); //checked - working perfect
 
-uRouter.post("/login", adminMiddleware, userLogin, (req, resp) => {
+uRouter.post("/login", userMiddleware, userLogin, (req, resp) => {
   resp.setHeader("authorization", req.token);
   resp.send("user has logged in successfully.");
 });
 
-uRouter.post("/course/purchase", function (req, resp) {
+uRouter.post("/course/purchase", jwtVerifyUserMiddleware, (req, resp) => {
   resp.send("purchase page");
 });
 
