@@ -118,7 +118,27 @@ async function deleteCourse(req, resp, next) {
   }
 }
 
-async function courseEdit(req, resp, next) {}
+async function courseEdit(req, resp, next) {
+  const adminId = req.adminId;
+  const { title, description, price, imageUrl } = req.body; // In real world we'll send the courseId here to locate the course but for now just to easily send the request on this api we are keeping title here.
+  try {
+    const isUpdated = await cModel.findOneAndUpdate(
+      { title: title, creatorId: adminId },
+      { description, price, imageUrl },
+    );
+    if (!isUpdated) {
+      return resp.status(404).json({
+        message: "Course not found or not authorized",
+      });
+    }
+    next();
+  } catch (e) {
+    resp.status(401).json({
+      message: "Not able to update the course details",
+      error: e.message,
+    });
+  }
+}
 
 module.exports = {
   adminSignup,

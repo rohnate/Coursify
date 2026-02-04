@@ -43,8 +43,14 @@ aRouter.delete(
   },
 ); // checked - working perfect
 
-aRouter.put("/course-edit", jwtVerifyAdminMiddleware, function (req, resp) {
-  resp.send("admin course-edit");
-});
+aRouter.put(
+  "/course-edit",
+  jwtVerifyAdminMiddleware,
+  courseMiddleware,
+  courseEdit,
+  (req, resp) => {
+    resp.send("Requested course has been edited by the admin");
+  },
+); // checked - working perfect
 
 module.exports = aRouter;

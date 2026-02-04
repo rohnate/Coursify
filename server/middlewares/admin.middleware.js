@@ -32,7 +32,7 @@ function jwtVerifyAdminMiddleware(req, resp, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_ADMIN_SECRET);
-    req.adminId = decoded._id;
+    req.adminId = decoded.id;
     next();
   } catch (e) {
     return resp
