@@ -9,13 +9,13 @@ async function userLogin(req, resp, next) {
   try {
     const user = await uModel.findOne({ email });
     if (!user) {
-      resp.status(401).json({
+      return resp.status(401).json({
         message: "User not found, Invalid Email or password",
       });
     } else {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        resp.status(401).json({
+        return resp.status(401).json({
           message: "Invalid user Password, Please try again.",
         });
       } else {

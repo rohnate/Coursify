@@ -10,7 +10,7 @@ const { jwtVerifyUserMiddleware } = require("../middlewares/user.middleware");
 cRouter.get("/", courses, function (req, resp) {
   const allCourses = req.courses;
   resp.json(allCourses);
-});
+}); // checked - working perfect
 
 cRouter.get(
   "/mycourses",
@@ -21,7 +21,7 @@ cRouter.get(
     const userCourses = req.userPurchase;
     resp.json(userCourses);
   },
-);
+); // checked - working perfect
 
 cRouter.get(
   "/course-content",

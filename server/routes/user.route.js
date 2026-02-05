@@ -18,7 +18,7 @@ uRouter.post("/signup", userMiddleware, userSignup, (req, resp) => {
 uRouter.post("/login", userMiddleware, userLogin, (req, resp) => {
   resp.setHeader("authorization", req.token);
   resp.send("user has logged in successfully.");
-});
+}); //checked - working perfect
 
 uRouter.post(
   "/course/purchase",
@@ -27,6 +27,6 @@ uRouter.post(
   (req, resp) => {
     resp.send("user has purchased the course successfully.");
   },
-);
+); //checked - working perfect
 
 module.exports = uRouter;
