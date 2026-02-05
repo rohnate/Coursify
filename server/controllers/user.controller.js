@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const uModel = require("../models/user.model");
 const pModel = require("../models/purchase.model");
+const cModel = require("../models/course.model");
 
 async function userLogin(req, resp, next) {
   const { email, password } = req.validatedData;
@@ -58,7 +59,42 @@ async function userSignup(req, resp, next) {
   }
 }
 
-function userPurchase(params) {}
+async function userPurchase(req, resp, next) {
+  const token = req.headers.authorization;
+  const courseId = req.body.courseId;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_USER_SECRET);
+    const userId = decoded.id;
+
+    const course = await cModel.findById(courseId);
+    if (!course) {
+      return resp.status(404).json({
+        message: "Course not found.",
+      });
+    }
+
+    const isAlreadyBought = await pModel.findOne({ userId, courseId });
+    if (isAlreadyBought) {
+      return resp.status(403).json({
+        message: "User has already bought the course.",
+      });
+    }
+
+    await pModel.create({
+      userId,
+      courseId,
+      courseTitle: course.title,
+    });
+
+    next();
+  } catch (e) {
+    return resp.status(401).json({
+      message: "Purchase failed due to some unexpected error.",
+      error: e.message,
+    });
+  }
+}
 
 module.exports = {
   userLogin,

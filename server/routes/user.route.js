@@ -20,8 +20,13 @@ uRouter.post("/login", userMiddleware, userLogin, (req, resp) => {
   resp.send("user has logged in successfully.");
 });
 
-uRouter.post("/course/purchase", jwtVerifyUserMiddleware, (req, resp) => {
-  resp.send("purchase page");
-});
+uRouter.post(
+  "/course/purchase",
+  jwtVerifyUserMiddleware,
+  userPurchase,
+  (req, resp) => {
+    resp.send("user has purchased the course successfully.");
+  },
+);
 
 module.exports = uRouter;

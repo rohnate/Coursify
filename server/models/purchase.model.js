@@ -8,7 +8,7 @@ const purchaseSchema = new schema(
   {
     userId: { type: objectId, ref: "user", required: true }, // here "user" is the reference from user model
     courseId: { type: objectId, ref: "course", required: true }, // "course" is the reference from course model
-    courseTitle: { type: objectId, ref: "course", required: true },
+    courseTitle: { type: String, ref: "course", required: true },
     purchasedOn: { type: Date, default: Date.now, required: true },
   },
   {
